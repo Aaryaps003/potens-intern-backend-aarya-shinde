@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model logs {
+  id            Int      @id @default(autoincrement())
+  actor         String   @db.VarChar(255)
+  action        String   @db.VarChar(255)
+  payload       Json
+  timestamp     BigInt
+  previous_hash String   @unique @db.VarChar(64)
+  hash          String   @unique @db.VarChar(64)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([actor, timestamp])
+}
+
+model pgmigrations {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255)
+  run_on DateTime @db.Timestamp(6)
+}
