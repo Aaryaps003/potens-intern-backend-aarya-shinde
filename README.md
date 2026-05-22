@@ -6,7 +6,7 @@ The goal of this project was to design a system where logs can never be silently
 
 ---
 
-##  FEATURES
+## FEATURES
 
 **Core Features**
 * Append-only logging system
@@ -225,6 +225,32 @@ This makes tampering mathematically detectable.
 
 ---
 
+##  CLI VERIFICATION & DEFECT TESTING
+
+Run full-chain verification directly from the terminal:
+
+```bash
+npm run verify
+```
+
+This performs the same integrity scan as the `/verify` API endpoint.
+
+### Simulating a Database Hack (Defect Testing)
+This system mathematically proves the database has not been tampered with. You can test this defect-catching system yourself:
+
+1. **Verify the Clean Chain:**
+   Run `npm run verify` to ensure the database is intact.
+2. **Stage the Hack:**
+   Open a new terminal and launch Prisma Studio (`npx prisma studio`).
+   Find an existing log (e.g., `BUS_DISPATCHED`) and manually change the action or payload text. Click **Save Changes**. The database silently accepts the lie.
+3. **Catch the Defect:**
+   Run `npm run verify` again. Because the payload changed, the original hash no longer matches the data, breaking the cryptographic chain.
+   The terminal will output: ` TAMPERING DETECTED: Payload modified at Log ID [X]`.
+
+*Note: To fix the database after testing, you must delete the tampered log and all subsequent logs in Prisma Studio to restore the chain to its last unbroken state.*
+
+---
+
 ##  LOGGING & SECURITY
 
 **Structured Logging**
@@ -235,18 +261,6 @@ Implemented on `POST /log` to prevent spam or abuse.
 
 **Authentication**
 Simple API-key middleware added for protected access.
-
----
-
-##  CLI VERIFICATION
-
-Run full-chain verification directly from the terminal:
-
-```bash
-npm run verify
-```
-
-This performs the same integrity scan as the `/verify` API endpoint.
 
 ---
 
