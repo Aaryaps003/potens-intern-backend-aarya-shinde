@@ -30,7 +30,7 @@ async function appendLog(actor, action, payload, retries = 3) {
   throw new Error('Failed to append log after maximum retries due to high concurrency');
 }
 
-// --- NEW FUNCTIONS BELOW ---
+
 
 async function getLogById(id) {
   const result = await db.query('SELECT * FROM logs WHERE id = $1', [id]);

@@ -11,15 +11,15 @@ async function createLog(req, res) {
     const logEntry = await logService.appendLog(actor, action, payload);
     res.status(201).json(logEntry);
   } catch (error) {
-    // 🛑 NEW: Print the exact bug to the server terminal
+     
     console.error("💥 CRITICAL CRASH:", error); 
     
-    // 🛑 NEW: Send the real error message back to the user
+   
     res.status(500).json({ error: error.message }); 
   }
 }
 
-// --- NEW FUNCTIONS BELOW ---
+ 
 
 async function getLog(req, res) {
   try {
@@ -52,5 +52,5 @@ async function exportLogs(req, res) {
   }
 }
 
-// Update the exports!
+ 
 module.exports = { createLog, getLog, verifyChain, exportLogs };
